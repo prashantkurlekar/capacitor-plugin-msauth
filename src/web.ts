@@ -20,6 +20,18 @@ interface AuthResult {
 }
 
 export class MsAuth extends WebPlugin implements MsAuthPlugin {
+  async loginWithContext(context: PublicClientApplication, options: WebLoginOptions): Promise<AuthResult> {
+    try {
+      return await this.acquireTokenSilently(context, options.scopes).catch(() =>
+        this.acquireTokenInteractively(context, options.scopes),
+      );
+    } catch (error) {
+      console.error('MSAL: Error occurred while logging in', error);
+
+      throw error;
+    }
+  }
+
   async login(options: WebLoginOptions): Promise<AuthResult> {
     const context = this.createContext(options);
 
