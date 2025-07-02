@@ -1,16 +1,19 @@
 # Capacitor Plugin MS auth
-This plugin contains an implementation of MSAL for Capacitor. 
+
+This plugin contains an implementation of MSAL for Capacitor.
 
 ## Installation
-* `yarn add @recognizebv/capacitor-plugin-msauth`
-* `npx cap sync`
-* Create an app registration
-* In the app registration, go to Authentication, and then Add platform, and then iOS/macOS
-* You will be asked for a bundle identifier, which you can find in Xcode (under the General tab of your project)
-* Do the same for Android. When asked for the package name, use the name defined in `AndroidManifest.xml`.
-* In the Signature section, generate a hash for your key. You will need this key hash later.
-* (iOS) Add a new keychain group to your project's Signing & Capabilities. The keychain group should be `com.microsoft.adalcache`
-* (iOS) Configure URL-schemes by adding the following to your `Info.plist` file:
+
+- `yarn add @recognizebv/capacitor-plugin-msauth`
+- `npx cap sync`
+- Create an app registration
+- In the app registration, go to Authentication, and then Add platform, and then iOS/macOS
+- You will be asked for a bundle identifier, which you can find in Xcode (under the General tab of your project)
+- Do the same for Android. When asked for the package name, use the name defined in `AndroidManifest.xml`.
+- In the Signature section, generate a hash for your key. You will need this key hash later.
+- (iOS) Add a new keychain group to your project's Signing & Capabilities. The keychain group should be `com.microsoft.adalcache`
+- (iOS) Configure URL-schemes by adding the following to your `Info.plist` file:
+
 ```
 <key>CFBundleURLTypes</key>
 <array>
@@ -27,15 +30,18 @@ This plugin contains an implementation of MSAL for Capacitor.
     <string>msauthv3</string>
 </array>
 ```
-* (iOS) Add `import RecognizebvCapacitorPluginMsauth` to the top of the AppDelegate file to ensure that the library is linked
-* (iOS) if your app's AppDelegate already implements a `application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool` function, you should add the following code inside this method:
+
+- (iOS) Add `import PrashantkurlekarCapacitorPluginMsauth` to the top of the AppDelegate file to ensure that the library is linked
+- (iOS) if your app's AppDelegate already implements a `application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool` function, you should add the following code inside this method:
+
 ```swift
 if MsAuthPlugin.checkAppOpen(url: url, options: options) == true {
     return true
 }
 ```
 
-* (Android) In the `AndroidManifest.xml` file, append the following code within the `<application>` section:
+- (Android) In the `AndroidManifest.xml` file, append the following code within the `<application>` section:
+
 ```xml
 <activity
         android:name="com.microsoft.identity.client.BrowserTabActivity"
@@ -53,7 +59,8 @@ if MsAuthPlugin.checkAppOpen(url: url, options: options) == true {
 
 Note that there are two placeholders, one for you package name and one for the key hash.
 
-* (Android) Add the following snippet to the `build.gradle` file in the `android/` folder
+- (Android) Add the following snippet to the `build.gradle` file in the `android/` folder
+
 ```gradle
 allprojects {
     repositories {
@@ -64,44 +71,50 @@ allprojects {
 }
 ```
 
-* (Android) Register the plugin in the main activity
+- (Android) Register the plugin in the main activity
 
 ## Usage
+
 Usage of the plugin is fairly simple, as it has just two methods: `login` and `logout`.
 
 ### Login
-```typescript
-import {Plugins} from '@capacitor/core';
 
-const {MsAuthPlugin} = Plugins;
+```typescript
+import { Plugins } from '@capacitor/core';
+
+const { MsAuthPlugin } = Plugins;
 
 const result = await MsAuthPlugin.login({
-    clientId: '<client id>',
-    tenant: '<tenant, defaults to common>',
-    domainHint: '<domainHint>',
-    scopes: ['<scopes, defaults to no scopes>'],
-    keyHash: '<Android only, the key hash as obtained above>',
-    authorityType: '<AAD/B2C/CIAM>',
-    authorityUrl: '<To sign the user into a specific CIAM tenant, configure with a specific authority. For example: https://xxx.ciamlogin.com/dddd5555-eeee-6666-ffff-00001111aaaa>',
+  clientId: '<client id>',
+  tenant: '<tenant, defaults to common>',
+  domainHint: '<domainHint>',
+  scopes: ['<scopes, defaults to no scopes>'],
+  keyHash: '<Android only, the key hash as obtained above>',
+  authorityType: '<AAD/B2C/CIAM>',
+  authorityUrl:
+    '<To sign the user into a specific CIAM tenant, configure with a specific authority. For example: https://xxx.ciamlogin.com/dddd5555-eeee-6666-ffff-00001111aaaa>',
 });
 
 const accessToken = result.accessToken;
 ```
 
 ### Logout
-```typescript
-import {Plugins} from '@capacitor/core';
 
-const {MsAuthPlugin} = Plugins;
+```typescript
+import { Plugins } from '@capacitor/core';
+
+const { MsAuthPlugin } = Plugins;
 
 await MsAuthPlugin.logout({
-    clientId: '<client id>',
-    tenant: '<tenant, defaults to common>',
-    domainHint: '<domainHint>',
-    keyHash: '<Android only, the key hash as obtained above>',
+  clientId: '<client id>',
+  tenant: '<tenant, defaults to common>',
+  domainHint: '<domainHint>',
+  keyHash: '<Android only, the key hash as obtained above>',
 });
 ```
+
 ## MSAL Versions
+
 There are some scenarios where the default project may be generated in such a way which prevents a build from succeeding. To get around this, a variable has been exposed to allow users to configure the Microsoft Authentication library version. By setting the `recognizebvMSALVersion` variable in your root `build.gradle` you can override the default version used during dependency resolution. See this [issue](https://github.com/recognizegroup/capacitor-plugin-msauth/issues/42) for more details. Here's an example you can place in your root `build.gradle` file to override the MSAL version.
 
 ```groovy

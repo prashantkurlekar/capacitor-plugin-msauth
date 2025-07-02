@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "RecognizebvCapacitorPluginMsauth.podspec"
+    "PrashantkurlekarCapacitorPluginMsauth.podspec"
   ],
   "author": "Recognize",
   "license": "LGPL-3.0",
