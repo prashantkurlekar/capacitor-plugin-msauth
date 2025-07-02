@@ -1,8 +1,6 @@
-import type { PublicClientApplication } from '@azure/msal-browser';
+import { PublicClientApplication } from '@azure/msal-browser';
 import { WebPlugin } from '@capacitor/core';
-
 import type { BaseOptions, MsAuthPlugin } from './definitions';
-
 interface WebBaseOptions extends BaseOptions {
     redirectUri?: string;
 }
